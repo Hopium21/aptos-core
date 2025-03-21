@@ -627,7 +627,7 @@ impl BlockTree {
 /// Implement the BlockStorage trait for the BlockTree.
 /// This is required to calculate and fetch the block window.
 impl BlockStorage for BlockTree {
-    fn get_block(&self, block_id: &HashValue) -> Option<Arc<PipelinedBlock>> {
+    fn get_pipelined_block(&self, block_id: &HashValue) -> Option<Arc<PipelinedBlock>> {
         self.get_block(block_id)
     }
 }

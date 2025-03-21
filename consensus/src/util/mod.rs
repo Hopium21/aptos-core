@@ -35,7 +35,7 @@ pub fn calculate_window_start_round(current_round: Round, window_size: u64) -> R
 /// A simple trait that provides a way to get blocks by their ID (i.e., hash).
 /// This allows us to abstract the block window logic from the underlying storage mechanism.
 pub trait BlockStorage {
-    fn get_block(&self, block_id: &HashValue) -> Option<Arc<PipelinedBlock>>;
+    fn get_pipelined_block(&self, block_id: &HashValue) -> Option<Arc<PipelinedBlock>>;
 }
 
 /// Retrieves a Window of Recent Blocks from Storage
@@ -78,7 +78,9 @@ pub fn get_block_window_from_storage(
     while !current_block.is_genesis_block()
         && current_block.quorum_cert().certified_block().round() >= window_start_round
     {
-        if let Some(current_pipelined_block) = block_store.get_block(&current_block.parent_id()) {
+        if let Some(current_pipelined_block) =
+            block_store.get_pipelined_block(&current_block.parent_id())
+        {
             current_block = current_pipelined_block.block().clone();
             window.push(current_pipelined_block);
         } else {
